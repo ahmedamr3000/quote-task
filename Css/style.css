@@ -1,0 +1,21 @@
+button {
+
+    padding: 30px 90px;
+    background-color: blue;
+    color: white;
+}
+
+button:hover {
+    background-color: red;
+}
+
+
+.wight{
+
+    font-size: 60px;
+}
+
+.pwhite {
+
+    font-size: 30px;
+}
