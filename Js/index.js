@@ -1,24 +1,80 @@
-var names = [
-  "― Oscar Wilde",
-  "― Frank Zappa",
-  "― Mark Twain",
-  "― John Green, The Fault in Our Stars",
-  "We are all in the gutter, but some of us are looking at the stars.",
-  "Life is what happens to us while we are making other plans.",
-];
+var SiteNameInput = document.getElementById("SiteName");
+var SiteURLInput = document.getElementById("SiteURL");
+var alertMessage = document.getElementById("alertMessage");
 
-var quote = [
-  " Be yourself; everyone else is already taken. ",
-  "So many books, so little time.",
-  "Good friends, good books, and a sleepy conscience: this is the ideal life.",
-  "As he read, I fell in love the way you fall asleep: slowly, and then all at once.",
-  "― Oscar Wilde, Lady Windermere's Fan ",
-  "― Allen Saunders ",
-];
+var productList = [];
 
-function auto() {
-  randomNum = Math.floor(Math.random() * quote.length);
+if (localStorage.getItem("products") != null) {
+  productList = JSON.parse(localStorage.getItem("products"));
+  display();
+}
 
-  document.getElementById("quote").innerHTML = quote[randomNum];
-  document.getElementById("name").innerHTML = names[randomNum];
+function addProduct() {
+  if (rejexName() && rejexUrl()) {
+    var product = {
+      siteName: SiteURLInput.value,
+      SiteURL: SiteURLInput.value,
+    };
+    productList.push(product);
+    localStorage.setItem("products", JSON.stringify(productList));
+
+    clear();
+    display();
+  } else {
+    alertMessage.classList.remove("d-none");
+  }
+}
+
+function clear() {
+  SiteNameInput.value = "";
+  SiteURLInput.value = "";
+}
+
+function display() {
+  var displayList = "";
+  for (var i = 0; i < productList.length; i++) {
+    displayList += `<tr>
+<td>${[i]}</td>
+<td>  ${productList[i].siteName}</td>
+<td><button class="btn btn-warning">  <a href="${
+      productList[i].SiteURL
+    }"><i class="fa-solid fa-eye col"></i> Visit </a</button></td>
+<td> <button  onclick="deletItem(${i})" class="btn btn-danger"> <i class="fa-solid fa-trash"></i> Delete </button></td>
+</tr>`;
+  }
+  document.getElementById("tableContent").innerHTML = displayList;
+}
+
+function deletItem(index) {
+  productList.splice(index, 1);
+  display();
+}
+
+function rejexName() {
+  var text = SiteNameInput.value;
+  var rejex = /^[A-Z][a-z]{3,8}$/;
+
+  if (rejex.test(text)) {
+    SiteNameInput.classList.add("is-valid");
+    SiteNameInput.classList.remove("is-invalid");
+  } else {
+    SiteNameInput.classList.add("is-invalid");
+    SiteNameInput.classList.remove("is-valid");
+  }
+}
+
+function rejexUrl() {
+  var text = SiteURLInput.value;
+  var rejex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if (rejex.test(text)) {
+    SiteURLInput.classList.add("is-valid");
+    SiteURLInput.classList.remove("is-invalid");
+  } else {
+    SiteURLInput.classList.add("is-invalid");
+    SiteURLInput.classList.remove("is-valid");
+  }
+}
+
+function removeDnone() {
+  alertMessage.classList.add("d-none");
 }
